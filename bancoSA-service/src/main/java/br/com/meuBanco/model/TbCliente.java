@@ -1,0 +1,91 @@
+package br.com.meuBanco.model;
+
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+
+/**
+ * The persistent class for the tb_cliente database table.
+ * 
+ */
+@Entity
+@Table(name="tb_cliente")
+public class TbCliente {
+	
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id_cliente", unique=true, nullable=false)
+	private int idCliente;
+
+	@Column(name="tb_cliente_nome", nullable=false, length=45)
+	private String tbClienteNome;
+
+	//bi-directional many-to-one association to TbAgencia
+	@ManyToOne
+	@JoinColumn(name="tb_agencia_id_agencia", nullable=false)
+	private TbAgencia tbAgencia;
+
+	//bi-directional many-to-one association to TbConta
+	@OneToMany(mappedBy="tbCliente")
+	private List<TbConta> tbContas;
+
+	public TbCliente() {
+	}
+
+	public int getIdCliente() {
+		return this.idCliente;
+	}
+
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public String getTbClienteNome() {
+		return this.tbClienteNome;
+	}
+
+	public void setTbClienteNome(String tbClienteNome) {
+		this.tbClienteNome = tbClienteNome;
+	}
+
+	public TbAgencia getTbAgencia() {
+		return this.tbAgencia;
+	}
+
+	public void setTbAgencia(TbAgencia tbAgencia) {
+		this.tbAgencia = tbAgencia;
+	}
+
+	public List<TbConta> getTbContas() {
+		return this.tbContas;
+	}
+
+	public void setTbContas(List<TbConta> tbContas) {
+		this.tbContas = tbContas;
+	}
+
+	public TbConta addTbConta(TbConta tbConta) {
+		getTbContas().add(tbConta);
+		tbConta.setTbCliente(this);
+
+		return tbConta;
+	}
+
+	public TbConta removeTbConta(TbConta tbConta) {
+		getTbContas().remove(tbConta);
+		tbConta.setTbCliente(null);
+
+		return tbConta;
+	}
+
+}
